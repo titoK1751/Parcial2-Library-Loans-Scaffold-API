@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { RefreshToken } from './refresh-token.entity';
+import { Loan } from './loan.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -54,4 +55,7 @@ export class User {
 
   @OneToMany(() => RefreshToken, (token) => token.user, { cascade: true })
   refreshTokens!: RefreshToken[];
+
+  @OneToMany(() => Loan, (loan) => loan.user)
+  loans!: Loan[];
 }
