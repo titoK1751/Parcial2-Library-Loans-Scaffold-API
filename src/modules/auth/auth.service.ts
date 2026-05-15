@@ -1,9 +1,5 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  ConflictException,
-  BadRequestException,
-} from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -37,7 +33,7 @@ export class AuthService {
     }
 
     // Hash de la contraseña
-    const saltRounds = this.configService.get<number>('bcrypt.saltRounds');
+    const saltRounds = this.configService.get<number>('bcrypt.saltRounds') ?? 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
     // Crear el nuevo usuario
