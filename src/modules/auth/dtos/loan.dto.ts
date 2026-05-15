@@ -6,11 +6,9 @@ import {
   IsDateString,
   IsDecimal,
   Min,
-  ValidateIf,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { LoanStatus, LoanPriority } from '../auth/loan.entity';
-import { Type } from 'class-transformer';
+import { LoanStatus } from '../auth/loan.entity';
 
 export class CreateLoanDto {
   @ApiProperty({
@@ -38,16 +36,6 @@ export class CreateLoanDto {
   })
   @IsDateString()
   dueAt!: string;
-
-  @ApiPropertyOptional({
-    example: 'normal',
-    enum: LoanPriority,
-    default: 'normal',
-    description: 'Prioridad del préstamo',
-  })
-  @IsOptional()
-  @IsEnum(LoanPriority)
-  priority?: LoanPriority;
 }
 
 export class UpdateLoanDto {
@@ -99,9 +87,6 @@ export class LoanResponseDto {
 
   @ApiProperty()
   status!: LoanStatus;
-
-  @ApiProperty()
-  priority!: LoanPriority;
 
   @ApiProperty()
   fineAmount!: number;
