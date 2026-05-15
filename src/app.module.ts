@@ -1,8 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import configuration from './config/configuration';
 import { validationSchema } from './config/validation.schema';
+import { AuthModule } from '@modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 
 @Module({
@@ -29,6 +31,7 @@ import { HealthModule } from './modules/health/health.module';
         logging: config.get<boolean>('database.logging'),
       }),
     }),
+    AuthModule,
     HealthModule,
   ],
 })
