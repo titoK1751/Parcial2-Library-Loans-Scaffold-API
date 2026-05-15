@@ -6,7 +6,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
-  OneToMany,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -18,11 +17,6 @@ export enum LoanStatus {
   RETURNED = 'returned',
   OVERDUE = 'overdue',
   LOST = 'lost',
-}
-
-export enum LoanPriority {
-  NORMAL = 'normal',
-  URGENT = 'urgent',
 }
 
 @Entity('loans')
@@ -53,13 +47,6 @@ export class Loan {
     default: LoanStatus.ACTIVE,
   })
   status!: LoanStatus;
-
-  @Column({
-    type: 'enum',
-    enum: LoanPriority,
-    default: LoanPriority.NORMAL,
-  })
-  priority!: LoanPriority;
 
   @Column({ type: 'numeric', precision: 10, scale: 2, default: '0.00' })
   fineAmount!: number;

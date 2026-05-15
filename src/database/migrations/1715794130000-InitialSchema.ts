@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class InitialSchema1715794130000 implements MigrationInterface {
@@ -47,7 +48,6 @@ export class InitialSchema1715794130000 implements MigrationInterface {
         "dueAt" TIMESTAMP WITH TIME ZONE NOT NULL,
         "returnedAt" TIMESTAMP WITH TIME ZONE,
         status public.loan_status_enum NOT NULL DEFAULT 'active',
-        priority public.loan_priority_enum NOT NULL DEFAULT 'normal',
         "fineAmount" numeric(10,2) NOT NULL DEFAULT '0.00',
         "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
         "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
