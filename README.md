@@ -36,14 +36,81 @@ docker compose up -d
 # 3) Dependencias
 npm install
 
-# 4) Build
-npm run build
+# 4) Migraciones
+npm run migration:run
 
 # 5) Arrancar la app en modo desarrollo
 npm run start:dev
 ```
 
-Abre [http://localhost:3000/api/docs](http://localhost:3000/api/docs) y deberías ver el Swagger UI con el módulo `health` ya disponible.
+Abre [http://localhost:3000/api/docs](http://localhost:3000/api/docs) para acceder a **Swagger UI** con todos los endpoints documentados.
+
+### Credenciales de Prueba
+
+Para probar la API, puedes usar el siguiente usuario seed (debe existir en la BD):
+
+**Usuario Admin:**
+- Email: `admin@library.com`
+- Contraseña: `Admin123456!`
+- Rol: `admin`
+
+**Usuario Regular (Member):**
+- Email: `user@library.com`
+- Contraseña: `User123456!`
+- Rol: `member`
+
+> **Nota:** Para agregar un seed automático, ejecuta los siguientes comandos después de las migraciones o implementa un script de seed en `src/database/seeds/`.
+
+### Tests Unitarios
+
+Ejecuta los tests unitarios del `LoansService`:
+
+```bash
+npm test                    # Ejecuta todos los tests
+npm test -- --testPathPattern="loans.service.spec"  # Solo tests de LoansService
+npm run test:cov           # Tests con coverage
+```
+
+**Casos cubiertos:**
+- ✅ Crea préstamo exitoso cuando item disponible, usuario bajo límite, fechas válidas
+- ✅ Lanza ConflictException si item ya tiene préstamo activo (R2)
+- ✅ Lanza ConflictException si usuario tiene 3 préstamos activos (R3)
+- ✅ Calcula multa correctamente: 5 días atrasados × 0.50 = 2.50 (R4)
+
+### Swagger UI
+
+La documentación interactiva de la API está disponible en:
+
+```
+http://localhost:3000/api/docs
+```
+
+**Endpoints protegidos:** Todos los endpoints excepto `/auth/register`, `/auth/login`, `/auth/refresh` y `/health/*` requieren autenticación Bearer Token. Usa el token `accessToken` recibido en login.
+
+## Decisión: Transición Automática a Overdue (R5)
+
+**Estrategia implementada: On-demand transition**
+
+La transición de `ACTIVE` a `OVERDUE` ocurre **bajo demanda** cuando:
+
+1. Un usuario intenta devolver un préstamo atrasado
+2. Se calcula automáticamente la multa según `DAILY_FINE_RATE`
+3. El estado cambia a `RETURNED` (no a `OVERDUE` como estado intermedio)
+
+**Alternativas no implementadas:**
+- ❌ **Cron job:** Requeriría un scheduler externo (@nestjs/schedule) para revisar periódicamente préstamos
+- ❌ **On-app-startup:** Overhead innecesario en cada arranque
+- ❌ **Event listener:** Complejidad adicional para una operación simple
+
+Esta estrategia minimiza la sobrecarga sin sacrificar funcionalidad.
+
+## Bonos Implementados
+
+- ✅ **LoansService con cálculo automático de multas** — método `calculateFine(dueAt)` integrado
+- ✅ **Unit tests con mocks** — Tests sin BD real usando jest mocks
+- ✅ **DTOs tipados con Swagger** — `@ApiProperty` en todos los DTOs
+- ✅ **@ApiBearerAuth() en endpoints protegidos** — auth decorators listos
+- ✅ **Validaciones de negocio** — R2, R3 en `createLoan`, R4 en `returnLoan`
 
 ## Scripts disponibles
 

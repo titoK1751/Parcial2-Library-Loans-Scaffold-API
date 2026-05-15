@@ -6,7 +6,7 @@ import {
   BadRequestException,
   HttpCode,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto, RefreshTokenDto, AuthResponseDto } from './dtos';
 import { Public } from '@common/decorators/public.decorator';
@@ -74,6 +74,7 @@ export class AuthController {
     return this.authService.refreshTokens(refreshTokenDto.refreshToken);
   }
 
+  @ApiBearerAuth()
   @Post('logout')
   @HttpCode(200)
   @ApiOperation({ summary: 'Logout de usuario' })
