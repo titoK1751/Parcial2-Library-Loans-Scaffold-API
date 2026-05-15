@@ -5,6 +5,8 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import configuration from './config/configuration';
 import { validationSchema } from './config/validation.schema';
 import { AuthModule } from '@modules/auth/auth.module';
+import { ItemsModule } from '@modules/auth/items.module';
+import { LoansModule } from '@modules/auth/loans.module';
 import { HealthModule } from './modules/health/health.module';
 
 @Module({
@@ -32,6 +34,8 @@ import { HealthModule } from './modules/health/health.module';
       }),
     }),
     AuthModule,
+    ItemsModule,
+    LoansModule,
     HealthModule,
   ],
 })
