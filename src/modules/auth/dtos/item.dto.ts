@@ -78,6 +78,11 @@ export class ItemResponseDto {
   @ApiProperty()
   isActive!: boolean;
 
+  @ApiProperty({
+    description: 'Indica si el artículo está disponible para prestar (no tiene préstamo activo)',
+  })
+  isAvailable?: boolean;
+
   @ApiProperty()
   createdAt!: Date;
 
